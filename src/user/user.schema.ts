@@ -1,6 +1,7 @@
 import z from "zod";
 
 export const inUserSchema = z.object({
+  id: z.string(),
   nome: z.string(),
   email: z.email(),
   senha: z.string(),
@@ -8,20 +9,12 @@ export const inUserSchema = z.object({
   endereco: z.string(),
 });
 
-export const updateUserSchema = z
-  .object({
-    nome: z.string().optional(),
-    email: z.email().optional(),
-    telefone: z.string().optional(),
-    endereco: z.string().optional(),
-  })
-  .refine(
-    (data) =>
-      Object.values(data).some((value) => value !== undefined && value !== ""),
-    {
-      message: "Informe ao menos um campo para atualizar.",
-    },
-  );
+export const updateUserSchema = z.object({
+  nome: z.string().optional(),
+  email: z.email().optional(),
+  telefone: z.string().optional(),
+  endereco: z.string().optional(),
+});
 
 export const outUserSchema = z
   .object({
