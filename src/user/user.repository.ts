@@ -1,41 +1,22 @@
-import { prisma } from "../db/config";
+import { db } from "../db/database";
 import type { inUser, updateUser } from "./user.schema";
 
 export class UserRepository {
-  async new(data: any) {
-    return await prisma.user.create({
-      data,
-      omit: { senha: true },
-    });
+  async new(data: inUser) {
+    return await db
+      .insertInto("users")
+      .values(data)
+      .returning(["id", "nome", "email", "telefone", "endereco"])
+      .executeTakeFirstOrThrow();
   }
 
   async list() {
-    return await prisma.user.findMany({
-      select: { id: true, nome: true, email: true },
-    });
+    return await db.selectFrom("users").select(["id", "nome", "email"]);
   }
 
-  async find(id: string) {
-    return await prisma.user.findUnique({
-      where: { id },
-      omit: {
-        senha: true,
-      },
-    });
-  }
+  async find(id: string) {}
 
-  async update(id: string, data: updateUser) {
-    return await prisma.user.update({
-      where: { id },
-      data,
-      omit: {
-        senha: true,
-      },
-    });
-  }
+  async update(id: string, data: updateUser) {}
 
-  async delete(id: string) {
-    const deleted = await prisma.user.deleteMany({ where: { id } });
-    return deleted;
-  }
+  async delete(id: string) {}
 }

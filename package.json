@@ -5,30 +5,27 @@
   "main": "app.ts",
   "scripts": {
     "dev": "tsx --watch src/app.ts",
-    "db:pull": "npx prisma db pull",
-    "db:push": "npx prisma db push",
-    "db:generate": "npx prisma generate",
-    "db:migrate": "npx prisma migrate dev"
+    "db:migrate": "tsx src/db/migrator.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@prisma/adapter-pg": "^7.10.0",
-    "@prisma/client": "^7.10.0",
-    "@types/bcrypt": "^6.0.0",
-    "@types/express": "^5.0.6",
     "bcrypt": "^6.0.0",
     "dotenv": "^18.0.3",
     "express": "^5.2.1",
+    "kysely": "^0.29.6",
     "pg": "^8.23.0",
-    "prisma": "^7.10.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
+    "uuidv7": "^1.2.1",
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@types/node": "^26.6.2"
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.2",
+    "@types/pg": "^8.23.1"
   }
 }

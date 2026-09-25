@@ -1,7 +1,8 @@
 import type { ErrorRequestHandler, Request, Response } from "express";
 import { AppError } from "./AppError";
 import z, { ZodError } from "zod";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
+import { NoResultError } from "kysely";
+import { DatabaseError } from "pg";
 
 const zPretty = z.prettifyError;
 
@@ -27,28 +28,66 @@ export const errorHandler: ErrorRequestHandler = (
     });
   }
 
-  if (error instanceof PrismaClientKnownRequestError) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
-        status: "nao_encontrado",
-        message: "Registro não encontrado.",
-      });
-    } else if (error.code === "P2002") {
-      return res.status(409).json({
-        status: "conflito",
-        message:
-          "Já existe um registro com a chave única enviada na requisição.",
-      });
-    } else if (error.code === "P2003") {
-      return res.status(404).json({
-        status: "nao_encontrado",
-        message: "ID não encontrado no banco de dados.",
-      });
-    } else {
-      return res.status(400).json({
-        status: "solicitacao_invalida",
-        message: "Erro na operação com o banco de dados.",
-      });
+  if (error instanceof NoResultError) {
+    return res.status(404).json({
+      status: "nao_encontrado",
+      message: "Registro não encontrado.",
+    });
+  }
+
+  if (error instanceof DatabaseError) {
+    switch (error.code) {
+      case "23505": {
+        return res.status(409).json({
+          status: "conflito",
+          message: "Já existe um registro com os dados informados.",
+          detail: error.detail,
+        });
+      }
+
+      case "23503": {
+        return res.status(400).json({
+          status: "requisicao_invalida",
+          message:
+            "O registro referenciado não existe ou possui dependências ativas.",
+        });
+      }
+
+      case "23502": {
+        return res.status(400).json({
+          status: "requisicao_invalida",
+          message: `O campo '${error.column}' é obrigatório.`,
+        });
+      }
+
+      case "22P02": {
+        return res.status(400).json({
+          status: "requisicao_invalida",
+          message:
+            "Sintaxe ou tipo de dado inválido enviado para o banco de dados.",
+        });
+      }
+
+      case "23514": {
+        return res.status(400).json({
+          status: "requisicao_invalida",
+          message: "A operação viola uma regra de validação do banco de dados.",
+        });
+      }
+
+      case "57014": {
+        return res.status(504).json({
+          status: "tempo_esgotado",
+          message: "A operação no banco de dados excedeu o tempo limite.",
+        });
+      }
+
+      default: {
+        return res.status(500).json({
+          status: "erro_banco",
+          message: "Erro de processamento no banco de dados.",
+        });
+      }
     }
   }
 

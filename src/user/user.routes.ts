@@ -15,18 +15,27 @@ const userCtrl = new UserController(userServ);
 export const routeUsers = Router();
 
 routeUsers
-  .post("/users", (req: Request, res: Response, next: NextFunction) => {
-    userCtrl.criarUser(req, res, next);
+  .post("/users", async (req: Request, res: Response, next: NextFunction) => {
+    await userCtrl.criarUser(req, res, next);
   })
-  .get("/users", (req: Request, res: Response, next: NextFunction) => {
-    userCtrl.listarUsers(req, res, next);
+  .get("/users", async (req: Request, res: Response, next: NextFunction) => {
+    await userCtrl.listarUsers(req, res, next);
   })
-  .get("/users/:id", (req: Request, res: Response, next: NextFunction) => {
-    userCtrl.buscarUser(req, res, next);
-  })
-  .put("/users/:id", (req: Request, res: Response, next: NextFunction) => {
-    userCtrl.atualizarUser(req, res, next);
-  })
-  .delete("/users/:id", (req: Request, res: Response, next: NextFunction) => {
-    userCtrl.apagarUser(req, res, next);
-  });
+  .get(
+    "/users/:id",
+    async (req: Request, res: Response, next: NextFunction) => {
+      await userCtrl.buscarUser(req, res, next);
+    },
+  )
+  .put(
+    "/users/:id",
+    async (req: Request, res: Response, next: NextFunction) => {
+      await userCtrl.atualizarUser(req, res, next);
+    },
+  )
+  .delete(
+    "/users/:id",
+    async (req: Request, res: Response, next: NextFunction) => {
+      await userCtrl.apagarUser(req, res, next);
+    },
+  );
