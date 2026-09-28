@@ -1,7 +1,12 @@
-import type { ErrorRequestHandler, Request, Response } from "express";
+import type {
+  ErrorRequestHandler,
+  NextFunction,
+  Request,
+  Response,
+} from "express";
 import { AppError } from "./AppError";
 import z, { ZodError } from "zod";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
+import { Prisma } from "../../db/generated/prisma/client";
 
 const zPretty = z.prettifyError;
 
@@ -9,8 +14,9 @@ export const errorHandler: ErrorRequestHandler = (
   error: Error,
   req: Request,
   res: Response,
+  next: NextFunction,
 ) => {
-  console.error("<======ERRO======>", error);
+  console.error("<================ERRO================>\n", error);
 
   if (error instanceof AppError) {
     return res.status(error.statusCode).json({
@@ -27,7 +33,7 @@ export const errorHandler: ErrorRequestHandler = (
     });
   }
 
-  if (error instanceof PrismaClientKnownRequestError) {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
     if (error.code === "P2025") {
       return res.status(404).json({
         status: "nao_encontrado",

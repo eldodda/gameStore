@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.10.0",
   "engineVersion": "0edf323efd1d98336f3f0a68684b56f689b900d3",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Get a free hosted Postgres database in seconds: `npx create-db`\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/db/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id       String @id @default(uuid(7))\n  nome     String\n  email    String @unique\n  senha    String\n  telefone String\n  endereco String\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/db/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum Role {\n  ADMIN\n  CLIENT\n}\n\nmodel users {\n  id         String   @id @default(uuid(7))\n  nome       String   @db.VarChar(255)\n  email      String   @unique @db.VarChar(255)\n  senha      String   @db.VarChar(255)\n  role       Role?    @default(CLIENT)\n  telefone   String   @db.VarChar(255)\n  endereco   String   @db.VarChar(255)\n  created_at DateTime @default(now()) @db.Timestamp(6)\n}\n\nmodel games {\n  id         String  @id @default(uuid(7))\n  nome       String  @db.VarChar(255)\n  plataforma String  @db.VarChar(255)\n  descricao  String? @db.VarChar(255)\n  valor      Int     @db.Integer()\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -32,10 +32,10 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"senha\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telefone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"endereco\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null,\"schema\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"users\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"senha\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"telefone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"endereco\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"created_at\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null,\"schema\":null},\"games\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"plataforma\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"descricao\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"valor\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null,\"schema\":null}},\"enums\":{},\"types\":{}}")
 config.parameterizationSchema = {
-  strings: JSON.parse("[\"where\",\"User.findUnique\",\"User.findUniqueOrThrow\",\"orderBy\",\"cursor\",\"User.findFirst\",\"User.findFirstOrThrow\",\"User.findMany\",\"data\",\"User.createOne\",\"User.createMany\",\"User.createManyAndReturn\",\"User.updateOne\",\"User.updateMany\",\"User.updateManyAndReturn\",\"create\",\"update\",\"User.upsertOne\",\"User.deleteOne\",\"User.deleteMany\",\"having\",\"_count\",\"_min\",\"_max\",\"User.groupBy\",\"User.aggregate\",\"AND\",\"OR\",\"NOT\",\"id\",\"nome\",\"email\",\"senha\",\"telefone\",\"endereco\",\"equals\",\"in\",\"notIn\",\"lt\",\"lte\",\"gt\",\"gte\",\"contains\",\"startsWith\",\"endsWith\",\"not\",\"set\"]"),
-  graph: "JAkQCRoAAB8AMBsAAAQAEBwAAB8AMB0BAAAAAR4BACAAIR8BAAAAASABACAAISEBACAAISIBACAAIQEAAAABACABAAAAAQAgCRoAAB8AMBsAAAQAEBwAAB8AMB0BACAAIR4BACAAIR8BACAAISABACAAISEBACAAISIBACAAIQADAAAABAAgAwAABQAwBAAAAQAgAwAAAAQAIAMAAAUAMAQAAAEAIAMAAAAEACADAAAFADAEAAABACAGHQEAAAABHgEAAAABHwEAAAABIAEAAAABIQEAAAABIgEAAAABAQgAAAkAIAYdAQAAAAEeAQAAAAEfAQAAAAEgAQAAAAEhAQAAAAEiAQAAAAEBCAAACwAwAQgAAAsAMAYdAQAkACEeAQAkACEfAQAkACEgAQAkACEhAQAkACEiAQAkACECAAAAAQAgCAAADgAgBh0BACQAIR4BACQAIR8BACQAISABACQAISEBACQAISIBACQAIQIAAAAEACAIAAAQACACAAAABAAgCAAAEAAgAwAAAAEAIA8AAAkAIBAAAA4AIAEAAAABACABAAAABAAgAxUAACEAIBYAACMAIBcAACIAIAkaAAAaADAbAAAXABAcAAAaADAdAQAbACEeAQAbACEfAQAbACEgAQAbACEhAQAbACEiAQAbACEDAAAABAAgAwAAFgAwFAAAFwAgAwAAAAQAIAMAAAUAMAQAAAEAIAkaAAAaADAbAAAXABAcAAAaADAdAQAbACEeAQAbACEfAQAbACEgAQAbACEhAQAbACEiAQAbACEOFQAAHQAgFgAAHgAgFwAAHgAgIwEAAAABJAEAAAAEJQEAAAAEJgEAAAABJwEAAAABKAEAAAABKQEAAAABKgEAAAABKwEAAAABLAEAAAABLQEAHAAhDhUAAB0AIBYAAB4AIBcAAB4AICMBAAAAASQBAAAABCUBAAAABCYBAAAAAScBAAAAASgBAAAAASkBAAAAASoBAAAAASsBAAAAASwBAAAAAS0BABwAIQgjAgAAAAEkAgAAAAQlAgAAAAQmAgAAAAEnAgAAAAEoAgAAAAEpAgAAAAEtAgAdACELIwEAAAABJAEAAAAEJQEAAAAEJgEAAAABJwEAAAABKAEAAAABKQEAAAABKgEAAAABKwEAAAABLAEAAAABLQEAHgAhCRoAAB8AMBsAAAQAEBwAAB8AMB0BACAAIR4BACAAIR8BACAAISABACAAISEBACAAISIBACAAIQsjAQAAAAEkAQAAAAQlAQAAAAQmAQAAAAEnAQAAAAEoAQAAAAEpAQAAAAEqAQAAAAErAQAAAAEsAQAAAAEtAQAeACEAAAABLgEAAAABAAAAAAMVAAYWAAcXAAgAAAADFQAGFgAHFwAIAQIBAgMBBQYBBgcBBwgBCQoBCgwCCw0DDA8BDRECDhIEERMBEhQBExUCGBgFGRkJ"
+  strings: JSON.parse("[\"where\",\"users.findUnique\",\"users.findUniqueOrThrow\",\"orderBy\",\"cursor\",\"users.findFirst\",\"users.findFirstOrThrow\",\"users.findMany\",\"data\",\"users.createOne\",\"users.createMany\",\"users.createManyAndReturn\",\"users.updateOne\",\"users.updateMany\",\"users.updateManyAndReturn\",\"create\",\"update\",\"users.upsertOne\",\"users.deleteOne\",\"users.deleteMany\",\"having\",\"_count\",\"_min\",\"_max\",\"users.groupBy\",\"users.aggregate\",\"games.findUnique\",\"games.findUniqueOrThrow\",\"games.findFirst\",\"games.findFirstOrThrow\",\"games.findMany\",\"games.createOne\",\"games.createMany\",\"games.createManyAndReturn\",\"games.updateOne\",\"games.updateMany\",\"games.updateManyAndReturn\",\"games.upsertOne\",\"games.deleteOne\",\"games.deleteMany\",\"_avg\",\"_sum\",\"games.groupBy\",\"games.aggregate\",\"AND\",\"OR\",\"NOT\",\"id\",\"nome\",\"plataforma\",\"descricao\",\"valor\",\"equals\",\"in\",\"notIn\",\"lt\",\"lte\",\"gt\",\"gte\",\"not\",\"contains\",\"startsWith\",\"endsWith\",\"email\",\"senha\",\"Role\",\"role\",\"telefone\",\"endereco\",\"created_at\",\"set\",\"increment\",\"decrement\",\"multiply\",\"divide\"]"),
+  graph: "WhMgCywAAEoAMC0AAAQAEC4AAEoAMC8BAAAAATABAEAAIT8BAAAAAUABAEAAIUIAAEtCI0MBAEAAIUQBAEAAIUVAAEwAIQEAAAABACABAAAAAQAgCywAAEoAMC0AAAQAEC4AAEoAMC8BAEAAITABAEAAIT8BAEAAIUABAEAAIUIAAEtCI0MBAEAAIUQBAEAAIUVAAEwAIQFCAABNACADAAAABAAgAwAABQAwBAAAAQAgAwAAAAQAIAMAAAUAMAQAAAEAIAMAAAAEACADAAAFADAEAAABACAILwEAAAABMAEAAAABPwEAAAABQAEAAAABQgAAAEIDQwEAAAABRAEAAAABRUAAAAABAQgAAAkAIAgvAQAAAAEwAQAAAAE_AQAAAAFAAQAAAAFCAAAAQgNDAQAAAAFEAQAAAAFFQAAAAAEBCAAACwAwAQgAAAsAMAgvAQBTACEwAQBTACE_AQBTACFAAQBTACFCAABZQiNDAQBTACFEAQBTACFFQABaACECAAAAAQAgCAAADgAgCC8BAFMAITABAFMAIT8BAFMAIUABAFMAIUIAAFlCI0MBAFMAIUQBAFMAIUVAAFoAIQIAAAAEACAIAAAQACACAAAABAAgCAAAEAAgAwAAAAEAIA8AAAkAIBAAAA4AIAEAAAABACABAAAABAAgBBUAAFYAIBYAAFgAIBcAAFcAIEIAAE0AIAssAABDADAtAAAXABAuAABDADAvAQA0ACEwAQA0ACE_AQA0ACFAAQA0ACFCAABEQiNDAQA0ACFEAQA0ACFFQABFACEDAAAABAAgAwAAFgAwFAAAFwAgAwAAAAQAIAMAAAUAMAQAAAEAIAgsAAA_ADAtAAAdABAuAAA_ADAvAQAAAAEwAQBAACExAQBAACEyAQBBACEzAgBCACEBAAAAGgAgAQAAABoAIAgsAAA_ADAtAAAdABAuAAA_ADAvAQBAACEwAQBAACExAQBAACEyAQBBACEzAgBCACEBMgAATQAgAwAAAB0AIAMAAB4AMAQAABoAIAMAAAAdACADAAAeADAEAAAaACADAAAAHQAgAwAAHgAwBAAAGgAgBS8BAAAAATABAAAAATEBAAAAATIBAAAAATMCAAAAAQEIAAAiACAFLwEAAAABMAEAAAABMQEAAAABMgEAAAABMwIAAAABAQgAACQAMAEIAAAkADAFLwEAUwAhMAEAUwAhMQEAUwAhMgEAVAAhMwIAVQAhAgAAABoAIAgAACcAIAUvAQBTACEwAQBTACExAQBTACEyAQBUACEzAgBVACECAAAAHQAgCAAAKQAgAgAAAB0AIAgAACkAIAMAAAAaACAPAAAiACAQAAAnACABAAAAGgAgAQAAAB0AIAYVAABOACAWAABRACAXAABQACAoAABPACApAABSACAyAABNACAILAAAMwAwLQAAMAAQLgAAMwAwLwEANAAhMAEANAAhMQEANAAhMgEANQAhMwIANgAhAwAAAB0AIAMAAC8AMBQAADAAIAMAAAAdACADAAAeADAEAAAaACAILAAAMwAwLQAAMAAQLgAAMwAwLwEANAAhMAEANAAhMQEANAAhMgEANQAhMwIANgAhDhUAADgAIBYAAD4AIBcAAD4AIDQBAAAAATUBAAAABDYBAAAABDcBAAAAATgBAAAAATkBAAAAAToBAAAAATsBAD0AITwBAAAAAT0BAAAAAT4BAAAAAQ4VAAA7ACAWAAA8ACAXAAA8ACA0AQAAAAE1AQAAAAU2AQAAAAU3AQAAAAE4AQAAAAE5AQAAAAE6AQAAAAE7AQA6ACE8AQAAAAE9AQAAAAE-AQAAAAENFQAAOAAgFgAAOAAgFwAAOAAgKAAAOQAgKQAAOAAgNAIAAAABNQIAAAAENgIAAAAENwIAAAABOAIAAAABOQIAAAABOgIAAAABOwIANwAhDRUAADgAIBYAADgAIBcAADgAICgAADkAICkAADgAIDQCAAAAATUCAAAABDYCAAAABDcCAAAAATgCAAAAATkCAAAAAToCAAAAATsCADcAIQg0AgAAAAE1AgAAAAQ2AgAAAAQ3AgAAAAE4AgAAAAE5AgAAAAE6AgAAAAE7AgA4ACEINAgAAAABNQgAAAAENggAAAAENwgAAAABOAgAAAABOQgAAAABOggAAAABOwgAOQAhDhUAADsAIBYAADwAIBcAADwAIDQBAAAAATUBAAAABTYBAAAABTcBAAAAATgBAAAAATkBAAAAAToBAAAAATsBADoAITwBAAAAAT0BAAAAAT4BAAAAAQg0AgAAAAE1AgAAAAU2AgAAAAU3AgAAAAE4AgAAAAE5AgAAAAE6AgAAAAE7AgA7ACELNAEAAAABNQEAAAAFNgEAAAAFNwEAAAABOAEAAAABOQEAAAABOgEAAAABOwEAPAAhPAEAAAABPQEAAAABPgEAAAABDhUAADgAIBYAAD4AIBcAAD4AIDQBAAAAATUBAAAABDYBAAAABDcBAAAAATgBAAAAATkBAAAAAToBAAAAATsBAD0AITwBAAAAAT0BAAAAAT4BAAAAAQs0AQAAAAE1AQAAAAQ2AQAAAAQ3AQAAAAE4AQAAAAE5AQAAAAE6AQAAAAE7AQA-ACE8AQAAAAE9AQAAAAE-AQAAAAEILAAAPwAwLQAAHQAQLgAAPwAwLwEAQAAhMAEAQAAhMQEAQAAhMgEAQQAhMwIAQgAhCzQBAAAAATUBAAAABDYBAAAABDcBAAAAATgBAAAAATkBAAAAAToBAAAAATsBAD4AITwBAAAAAT0BAAAAAT4BAAAAAQs0AQAAAAE1AQAAAAU2AQAAAAU3AQAAAAE4AQAAAAE5AQAAAAE6AQAAAAE7AQA8ACE8AQAAAAE9AQAAAAE-AQAAAAEINAIAAAABNQIAAAAENgIAAAAENwIAAAABOAIAAAABOQIAAAABOgIAAAABOwIAOAAhCywAAEMAMC0AABcAEC4AAEMAMC8BADQAITABADQAIT8BADQAIUABADQAIUIAAERCI0MBADQAIUQBADQAIUVAAEUAIQcVAAA7ACAWAABJACAXAABJACA0AAAAQgM1AAAAQgk2AAAAQgk7AABIQiMLFQAAOAAgFgAARwAgFwAARwAgNEAAAAABNUAAAAAENkAAAAAEN0AAAAABOEAAAAABOUAAAAABOkAAAAABO0AARgAhCxUAADgAIBYAAEcAIBcAAEcAIDRAAAAAATVAAAAABDZAAAAABDdAAAAAAThAAAAAATlAAAAAATpAAAAAATtAAEYAIQg0QAAAAAE1QAAAAAQ2QAAAAAQ3QAAAAAE4QAAAAAE5QAAAAAE6QAAAAAE7QABHACEHFQAAOwAgFgAASQAgFwAASQAgNAAAAEIDNQAAAEIJNgAAAEIJOwAASEIjBDQAAABCAzUAAABCCTYAAABCCTsAAElCIwssAABKADAtAAAEABAuAABKADAvAQBAACEwAQBAACE_AQBAACFAAQBAACFCAABLQiNDAQBAACFEAQBAACFFQABMACEENAAAAEIDNQAAAEIJNgAAAEIJOwAASUIjCDRAAAAAATVAAAAABDZAAAAABDdAAAAAAThAAAAAATlAAAAAATpAAAAAATtAAEcAIQAAAAAAAAFGAQAAAAEBRgEAAAABBUYCAAAAAUcCAAAAAUgCAAAAAUkCAAAAAUoCAAAAAQAAAAFGAAAAQgMBRkAAAAABAAAAAAMVAAYWAAcXAAgAAAADFQAGFgAHFwAIAAAABRUADhYAERcAEigADykAEAAAAAAABRUADhYAERcAEigADykAEAECAQIDAQUGAQYHAQcIAQkKAQoMAgsNAwwPAQ0RAg4SBBETARIUARMVAhgYBRkZCRobChscChwfCh0gCh4hCh8jCiAlAiEmCyIoCiMqAiQrDCUsCiYtCicuAioxDSsyEw"
 }
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
@@ -71,7 +71,7 @@ export interface PrismaClientConstructor {
    *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
    * })
    * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
+   * const users = await prisma.users.findMany()
    * ```
    * 
    * Read more in our [docs](https://pris.ly/d/client).
@@ -95,7 +95,7 @@ export interface PrismaClientConstructor {
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
  * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * const users = await prisma.users.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -189,14 +189,24 @@ export interface PrismaClient<
   }>>
 
       /**
-   * `prisma.user`: Exposes CRUD operations for the **User** model.
+   * `prisma.users`: Exposes CRUD operations for the **users** model.
     * Example usage:
     * ```ts
     * // Fetch zero or more Users
-    * const users = await prisma.user.findMany()
+    * const users = await prisma.users.findMany()
     * ```
     */
-  get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
+  get users(): Prisma.usersDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.games`: Exposes CRUD operations for the **games** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Games
+    * const games = await prisma.games.findMany()
+    * ```
+    */
+  get games(): Prisma.gamesDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

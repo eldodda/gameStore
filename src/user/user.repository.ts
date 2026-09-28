@@ -3,20 +3,20 @@ import type { inUser, updateUser } from "./user.schema";
 
 export class UserRepository {
   async new(data: any) {
-    return await prisma.user.create({
+    return await prisma.users.create({
       data,
       omit: { senha: true },
     });
   }
 
   async list() {
-    return await prisma.user.findMany({
+    return await prisma.users.findMany({
       select: { id: true, nome: true, email: true },
     });
   }
 
   async find(id: string) {
-    return await prisma.user.findUnique({
+    return await prisma.users.findUnique({
       where: { id },
       omit: {
         senha: true,
@@ -25,7 +25,7 @@ export class UserRepository {
   }
 
   async update(id: string, data: updateUser) {
-    return await prisma.user.update({
+    return await prisma.users.update({
       where: { id },
       data,
       omit: {
@@ -35,7 +35,7 @@ export class UserRepository {
   }
 
   async delete(id: string) {
-    const deleted = await prisma.user.deleteMany({ where: { id } });
+    const deleted = await prisma.users.deleteMany({ where: { id } });
     return deleted;
   }
 }

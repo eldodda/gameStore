@@ -10,7 +10,8 @@ export class UserService {
 
   async createUser(data: { senha: string }) {
     const { senha, ...dados } = data;
-    const hashPass = await hash(senha, 10);
+    const salt = 10;
+    const hashPass = await hash(senha, salt);
     const newUser = { senha: hashPass, ...dados };
     const valiData = zodVal.inUser(newUser);
     return await this.userRepo.new(valiData);
