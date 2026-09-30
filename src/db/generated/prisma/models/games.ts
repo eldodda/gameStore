@@ -262,7 +262,7 @@ export type gamesScalarWhereWithAggregatesInput = {
 }
 
 export type gamesCreateInput = {
-  id?: string
+  id: string
   nome: string
   plataforma: string
   descricao?: string | null
@@ -270,7 +270,7 @@ export type gamesCreateInput = {
 }
 
 export type gamesUncheckedCreateInput = {
-  id?: string
+  id: string
   nome: string
   plataforma: string
   descricao?: string | null
@@ -294,7 +294,7 @@ export type gamesUncheckedUpdateInput = {
 }
 
 export type gamesCreateManyInput = {
-  id?: string
+  id: string
   nome: string
   plataforma: string
   descricao?: string | null

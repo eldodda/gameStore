@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { errorHandler } from "./utils/errors/errorHandler";
-import { routeUsers } from "./user/user.routes";
-import { routeGames } from "./games/game.routes";
+import { routeUsers } from "./domains/user/user.routes";
+import { routeGames } from "./domains/games/game.routes";
 
 export const mainRoute = Router();
 

@@ -1,7 +1,7 @@
 import express from "express";
 import "dotenv/config";
 import { mainRoute } from "./main.route";
-import { testConnection } from "./db/config";
+import { testConnection } from "./db/prisma.config";
 
 const app = express();
 

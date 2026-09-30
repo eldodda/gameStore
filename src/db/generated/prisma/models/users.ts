@@ -170,7 +170,7 @@ export type UsersGroupByOutputType = {
   nome: string
   email: string
   senha: string
-  role: $Enums.Role | null
+  role: $Enums.Role
   telefone: string
   endereco: string
   created_at: Date
@@ -202,7 +202,7 @@ export type usersWhereInput = {
   nome?: Prisma.StringFilter<"users"> | string
   email?: Prisma.StringFilter<"users"> | string
   senha?: Prisma.StringFilter<"users"> | string
-  role?: Prisma.EnumRoleNullableFilter<"users"> | $Enums.Role | null
+  role?: Prisma.EnumRoleFilter<"users"> | $Enums.Role
   telefone?: Prisma.StringFilter<"users"> | string
   endereco?: Prisma.StringFilter<"users"> | string
   created_at?: Prisma.DateTimeFilter<"users"> | Date | string
@@ -213,7 +213,7 @@ export type usersOrderByWithRelationInput = {
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
-  role?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrder
   telefone?: Prisma.SortOrder
   endereco?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -227,7 +227,7 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.usersWhereInput | Prisma.usersWhereInput[]
   nome?: Prisma.StringFilter<"users"> | string
   senha?: Prisma.StringFilter<"users"> | string
-  role?: Prisma.EnumRoleNullableFilter<"users"> | $Enums.Role | null
+  role?: Prisma.EnumRoleFilter<"users"> | $Enums.Role
   telefone?: Prisma.StringFilter<"users"> | string
   endereco?: Prisma.StringFilter<"users"> | string
   created_at?: Prisma.DateTimeFilter<"users"> | Date | string
@@ -238,7 +238,7 @@ export type usersOrderByWithAggregationInput = {
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
-  role?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrder
   telefone?: Prisma.SortOrder
   endereco?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -255,29 +255,29 @@ export type usersScalarWhereWithAggregatesInput = {
   nome?: Prisma.StringWithAggregatesFilter<"users"> | string
   email?: Prisma.StringWithAggregatesFilter<"users"> | string
   senha?: Prisma.StringWithAggregatesFilter<"users"> | string
-  role?: Prisma.EnumRoleNullableWithAggregatesFilter<"users"> | $Enums.Role | null
+  role?: Prisma.EnumRoleWithAggregatesFilter<"users"> | $Enums.Role
   telefone?: Prisma.StringWithAggregatesFilter<"users"> | string
   endereco?: Prisma.StringWithAggregatesFilter<"users"> | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"users"> | Date | string
 }
 
 export type usersCreateInput = {
-  id?: string
+  id: string
   nome: string
   email: string
   senha: string
-  role?: $Enums.Role | null
+  role?: $Enums.Role
   telefone: string
   endereco: string
   created_at?: Date | string
 }
 
 export type usersUncheckedCreateInput = {
-  id?: string
+  id: string
   nome: string
   email: string
   senha: string
-  role?: $Enums.Role | null
+  role?: $Enums.Role
   telefone: string
   endereco: string
   created_at?: Date | string
@@ -288,7 +288,7 @@ export type usersUpdateInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   telefone?: Prisma.StringFieldUpdateOperationsInput | string
   endereco?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -299,18 +299,18 @@ export type usersUncheckedUpdateInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   telefone?: Prisma.StringFieldUpdateOperationsInput | string
   endereco?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type usersCreateManyInput = {
-  id?: string
+  id: string
   nome: string
   email: string
   senha: string
-  role?: $Enums.Role | null
+  role?: $Enums.Role
   telefone: string
   endereco: string
   created_at?: Date | string
@@ -321,7 +321,7 @@ export type usersUpdateManyMutationInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   telefone?: Prisma.StringFieldUpdateOperationsInput | string
   endereco?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -332,7 +332,7 @@ export type usersUncheckedUpdateManyInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   telefone?: Prisma.StringFieldUpdateOperationsInput | string
   endereco?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -375,8 +375,8 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
-export type NullableEnumRoleFieldUpdateOperationsInput = {
-  set?: $Enums.Role | null
+export type EnumRoleFieldUpdateOperationsInput = {
+  set?: $Enums.Role
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -439,7 +439,7 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     nome: string
     email: string
     senha: string
-    role: $Enums.Role | null
+    role: $Enums.Role
     telefone: string
     endereco: string
     created_at: Date

@@ -1,20 +1,21 @@
-import { AppError } from "../utils/errors/AppError";
-import { ZodVal } from "../utils/ZodVals";
-import type { UserRepository } from "./user.repository";
-import { hash } from "bcrypt";
+import { randomUUIDv7 } from "crypto";
+import { AppError } from "../../utils/errors/AppError";
+import { ZodVal } from "../../utils/ZodVals";
+import type { IUserDb } from "./user-db.interface";
+import { hashSenha } from "../../utils/passwdManager";
 
 const zodVal = new ZodVal();
 
 export class UserService {
-  constructor(private readonly userRepo: UserRepository) {}
+  constructor(private readonly userRepo: IUserDb) {}
 
   async createUser(data: { senha: string }) {
     const { senha, ...dados } = data;
-    const salt = 10;
-    const hashPass = await hash(senha, salt);
-    const newUser = { senha: hashPass, ...dados };
+    const hashPass = await hashSenha(senha);
+    const id = randomUUIDv7();
+    const newUser = { id: id, senha: hashPass, ...dados };
     const valiData = zodVal.inUser(newUser);
-    return await this.userRepo.new(valiData);
+    return await this.userRepo.save(valiData);
   }
 
   async listUsers() {

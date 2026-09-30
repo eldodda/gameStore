@@ -1,29 +1,34 @@
-import { AppError } from "../utils/errors/AppError";
-import { ZodVal } from "../utils/ZodVals";
-import type { GameRepository } from "./game.repository";
+import { randomUUIDv7 } from "crypto";
+import { AppError } from "../../utils/errors/AppError";
+import { ZodVal } from "../../utils/ZodVals";
+import type { IGameDb } from "./game-db.interface";
+import { converterValor, converterValorEmArr } from "../../utils/moneyCon";
 
 const zodVal = new ZodVal();
 
 export class GameService {
-  constructor(private readonly gameRepo: GameRepository) {}
+  constructor(private readonly gameRepo: IGameDb) {}
 
   async createGame(data: object) {
     const dados = data;
-    const valiData = zodVal.inGame(dados);
-    return await this.gameRepo.new(valiData);
+    const id = randomUUIDv7();
+    const game = { id: id, ...dados };
+    const valiData = zodVal.inGame(game);
+    const novoJogo = await this.gameRepo.save(valiData);
+    return converterValor(novoJogo);
   }
 
   async listGames() {
     const gamesList = await this.gameRepo.list();
     const validList = zodVal.outGameList(gamesList);
-    return validList;
+    return converterValorEmArr(validList);
   }
 
   async findGame(id: string) {
     const game = await this.gameRepo.find(id);
     if (!game) throw new AppError(404, "Nenhum jogo encontrado com esse ID.");
     const validGame = zodVal.outGame(game);
-    return validGame;
+    return converterValor(validGame);
   }
 
   async updateGame(id: string, data: object) {
@@ -31,7 +36,8 @@ export class GameService {
     if (!gameToUpdate)
       throw new AppError(404, "Nenhum jogo encontrado com esse ID.");
     const dataToUpdate = zodVal.inUpdateGame(data);
-    return await this.gameRepo.update(id, dataToUpdate);
+    const atualizado = await this.gameRepo.update(id, dataToUpdate);
+    return converterValor(atualizado);
   }
 
   async deleteGame(id: string) {

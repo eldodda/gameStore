@@ -16,4 +16,4 @@ async function testConnection() {
   }
 }
 
-export { prisma, testConnection };
+export { testConnection, prisma };

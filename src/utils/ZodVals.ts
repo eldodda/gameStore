@@ -1,15 +1,14 @@
 import {
-  inGameSchema,
   outGameArr,
-  outGameSchema,
+  gameSchema,
   updateGameSchema,
-} from "../games/game.schema";
+} from "../domains/games/game.schema";
 import {
   inUserSchema,
   outUserArr,
   outUserSchema,
   updateUserSchema,
-} from "../user/user.schema";
+} from "../domains/user/user.schema";
 
 export class ZodVal {
   inUser(dados: unknown) {
@@ -29,7 +28,7 @@ export class ZodVal {
   }
 
   inGame(dados: unknown) {
-    return inGameSchema.parse(dados);
+    return gameSchema.parse(dados);
   }
 
   inUpdateGame(dados: unknown) {
@@ -41,6 +40,6 @@ export class ZodVal {
   }
 
   outGame(dados: unknown) {
-    return outGameSchema.parse(dados);
+    return gameSchema.parse(dados);
   }
 }

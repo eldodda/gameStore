@@ -1,17 +1,12 @@
+import { makeGameCtrl } from "../../utils/errors/instanceFactory";
 import {
   Router,
   type NextFunction,
   type Request,
   type Response,
 } from "express";
-import { GameRepository } from "./game.repository";
-import { GameService } from "./game.service";
-import { GameController } from "./game.controller";
 
-const gameRepo = new GameRepository();
-const gameServ = new GameService(gameRepo);
-const gameCtrl = new GameController(gameServ);
-
+const gameCtrl = makeGameCtrl();
 export const routeGames = Router();
 
 routeGames
