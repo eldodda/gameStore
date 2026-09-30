@@ -1,4 +1,4 @@
-import { makeGameCtrl } from "../../utils/errors/instanceFactory";
+import { makeGameCtrl } from "../../utils/instanceFactory";
 import {
   Router,
   type NextFunction,

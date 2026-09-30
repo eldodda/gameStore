@@ -1,4 +1,4 @@
-import { makeUserCtrl } from "../../utils/errors/instanceFactory";
+import { makeUserCtrl } from "../../utils/instanceFactory";
 import {
   Router,
   type NextFunction,
